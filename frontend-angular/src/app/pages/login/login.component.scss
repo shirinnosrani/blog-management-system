@@ -1,0 +1,45 @@
+.auth-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8eaf6 0%, #f8f9fa 100%);
+  padding: 24px 16px;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .form-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #1a237e;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.75rem;
+    color: #1a237e;
+    margin-bottom: 8px;
+  }
+
+  p { color: #6c757d; }
+}
+
+.submit-btn {
+  height: 48px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.form-footer {
+  text-align: center;
+  color: #6c757d;
+  a { color: #1a237e; font-weight: 600; text-decoration: none; &:hover { text-decoration: underline; } }
+}

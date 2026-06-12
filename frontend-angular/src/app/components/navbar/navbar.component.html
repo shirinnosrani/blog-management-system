@@ -1,0 +1,40 @@
+<mat-toolbar color="primary" class="navbar">
+  <a routerLink="/" class="brand">
+    <mat-icon>article</mat-icon>
+    <span>BlogSpace</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <nav class="nav-links">
+    <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a mat-button routerLink="/blogs" routerLinkActive="active-link">Blogs</a>
+
+    @if (isLoggedIn()) {
+      <a mat-button routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+        Hello, {{ currentUser()?.fullName || '' }}
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <a mat-menu-item routerLink="/my-account">
+          <mat-icon>person</mat-icon>My Account
+        </a>
+        <a mat-menu-item routerLink="/my-blogs">
+          <mat-icon>book</mat-icon>My Blogs
+        </a>
+        <a mat-menu-item routerLink="/create-blog">
+          <mat-icon>add</mat-icon>Create Blog
+        </a>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>Logout
+        </button>
+      </mat-menu>
+    } @else {
+      <a mat-button routerLink="/login" routerLinkActive="active-link">Login</a>
+      <a mat-raised-button color="accent" routerLink="/register">Register</a>
+    }
+  </nav>
+</mat-toolbar>
