@@ -1,0 +1,85 @@
+<div class="page-container">
+  <h1 class="page-title">My Account</h1>
+
+  @if (loadingProfile) {
+    <div class="flex-center" style="padding: 80px"><mat-spinner diameter="56"></mat-spinner></div>
+  } @else if (profile) {
+    <div class="account-header">
+      <div class="avatar-large">{{ profile.fullName.charAt(0).toUpperCase() }}</div>
+      <div>
+        <h2>{{ profile.fullName }}</h2>
+        <p class="text-muted">{{ profile.email }}</p>
+        <p class="text-muted">Member since {{ profile.createdAt | date:'longDate' }}</p>
+      </div>
+    </div>
+
+    <mat-tab-group class="account-tabs">
+      <mat-tab label="Edit Profile">
+        <div class="tab-content">
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Full Name</mat-label>
+              <input matInput formControlName="fullName">
+              <mat-icon matSuffix>person</mat-icon>
+              @if (profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched) {
+                <mat-error>Full name must be at least 2 characters</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width mt-16">
+              <mat-label>Email Address</mat-label>
+              <input matInput [value]="profile.email" readonly>
+              <mat-icon matSuffix>email</mat-icon>
+              <mat-hint>Email cannot be changed</mat-hint>
+            </mat-form-field>
+            <div class="flex-end mt-24">
+              <button mat-flat-button color="primary" type="submit" [disabled]="profileForm.invalid || savingProfile">
+                @if (savingProfile) { <mat-spinner diameter="18" color="accent"></mat-spinner> }
+                @else { <mat-icon>save</mat-icon> Save Changes }
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Change Password">
+        <div class="tab-content">
+          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Current Password</mat-label>
+              <input matInput [type]="hideCurrent ? 'password' : 'text'" formControlName="currentPassword">
+              <button type="button" mat-icon-button matSuffix (click)="hideCurrent = !hideCurrent">
+                <mat-icon>{{ hideCurrent ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width mt-16">
+              <mat-label>New Password</mat-label>
+              <input matInput [type]="hideNew ? 'password' : 'text'" formControlName="newPassword">
+              <button type="button" mat-icon-button matSuffix (click)="hideNew = !hideNew">
+                <mat-icon>{{ hideNew ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched) {
+                <mat-error>New password must be at least 8 characters</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width mt-16">
+              <mat-label>Confirm New Password</mat-label>
+              <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword">
+              <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm">
+                <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (passwordForm.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched) {
+                <mat-error>Passwords do not match</mat-error>
+              }
+            </mat-form-field>
+            <div class="flex-end mt-24">
+              <button mat-flat-button color="primary" type="submit" [disabled]="passwordForm.invalid || savingPassword">
+                @if (savingPassword) { <mat-spinner diameter="18" color="accent"></mat-spinner> }
+                @else { <mat-icon>lock</mat-icon> Change Password }
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

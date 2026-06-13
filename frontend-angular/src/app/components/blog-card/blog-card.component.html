@@ -1,0 +1,22 @@
+<mat-card class="blog-card">
+  <mat-card-header>
+    <mat-card-title>{{ blog.title }}</mat-card-title>
+    <mat-card-subtitle>
+      <span class="meta">
+        <mat-icon>person</mat-icon> {{ blog.authorName }}
+        &nbsp;·&nbsp;
+        <mat-icon>calendar_today</mat-icon> {{ blog.createdAt | date:'mediumDate' }}
+        &nbsp;·&nbsp;
+        <mat-icon>comment</mat-icon> {{ blog.commentCount }} comments
+      </span>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="preview-text">{{ preview }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-flat-button color="primary" [routerLink]="['/blogs', blog.id]">
+      <mat-icon>open_in_new</mat-icon> Read More
+    </a>
+  </mat-card-actions>
+</mat-card>

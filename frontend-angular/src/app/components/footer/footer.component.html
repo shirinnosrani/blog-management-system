@@ -1,0 +1,21 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <mat-icon>article</mat-icon>
+      <span>BlogSpace</span>
+    </div>
+    <p class="footer-tagline">Share your thoughts with the world.</p>
+    <nav class="footer-links">
+      @if (isLoggedIn()) {
+        <a routerLink="/">Home</a>
+        <a routerLink="/blogs">Blogs</a>
+      } @else {
+        <a routerLink="/">Home</a>
+        <a routerLink="/blogs">Blogs</a>
+        <a routerLink="/login">Login</a>
+        <a routerLink="/register">Register</a>
+      }
+    </nav>
+    <p class="footer-copy">&copy; {{ year }} BlogSpace. All rights reserved.</p>
+  </div>
+</footer>

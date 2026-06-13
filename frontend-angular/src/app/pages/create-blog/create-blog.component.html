@@ -1,0 +1,37 @@
+<div class="page-container">
+  <a mat-button routerLink="/my-blogs" class="back-btn">
+    <mat-icon>arrow_back</mat-icon> My Blogs
+  </a>
+
+  <div class="editor-card">
+    <h1 class="page-title">Create New Blog</h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Blog Title</mat-label>
+        <input matInput formControlName="title" placeholder="Enter a compelling title...">
+        <mat-hint align="end">{{ form.get('title')?.value?.length || 0 }}/255</mat-hint>
+        @if (form.get('title')?.invalid && form.get('title')?.touched) {
+          <mat-error>Title must be at least 3 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width mt-24">
+        <mat-label>Content</mat-label>
+        <textarea matInput formControlName="content" rows="16"
+          placeholder="Write your blog content here..."></textarea>
+        @if (form.get('content')?.invalid && form.get('content')?.touched) {
+          <mat-error>Content must be at least 10 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-actions mt-24">
+        <a mat-stroked-button routerLink="/my-blogs">Cancel</a>
+        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || loading">
+          @if (loading) { <mat-spinner diameter="20" color="accent"></mat-spinner> }
+          @else { <mat-icon>publish</mat-icon> Publish Blog }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

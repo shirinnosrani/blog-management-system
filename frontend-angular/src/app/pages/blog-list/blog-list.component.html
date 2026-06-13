@@ -1,0 +1,28 @@
+<div class="page-container">
+  <h1 class="page-title">All Blogs</h1>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search blogs</mat-label>
+    <input matInput [(ngModel)]="search" (ngModelChange)="onSearch()" placeholder="Search by title or author...">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  @if (loading) {
+    <div class="flex-center" style="padding: 48px">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (filtered.length === 0) {
+    <div class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <h3>No blogs found</h3>
+      <p>Try a different search term.</p>
+    </div>
+  } @else {
+    <p class="result-count text-muted mb-24">{{ filtered.length }} blog(s) found</p>
+    <div class="card-grid">
+      @for (blog of filtered; track blog.id) {
+        <app-blog-card [blog]="blog"></app-blog-card>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,70 @@
+# Help - https://help.github.com/articles/ignoring-files/
+
+# Maven/Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.tar.gz
+*.zip
+*.rar
+
+# Gradle
+.gradle/
+build/
+
+# Eclipse
+.metadata/
+.recommenders/
+.classpath
+.project
+.settings/
+bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+
+# Visual Studio Code
+.vscode/
+
+# Node/Angular
+node_modules/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+.angular/
+
+# Operating System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Miscellaneous
+*.log
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

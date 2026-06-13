@@ -1,0 +1,13 @@
+<mat-card class="dashboard-card" [ngClass]="'card-' + color">
+  <mat-card-content>
+    <div class="card-inner">
+      <div class="card-info">
+        <p class="card-title">{{ title }}</p>
+        <p class="card-value">{{ value }}</p>
+      </div>
+      <div class="card-icon">
+        <mat-icon>{{ icon }}</mat-icon>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

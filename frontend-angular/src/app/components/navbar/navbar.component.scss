@@ -1,0 +1,47 @@
+.navbar {
+  background: linear-gradient(
+    90deg,
+    #1a237e 0%,
+    #283593 50%,
+    #3949ab 100%
+  ) !important;
+  color: white !important;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.nav-links a,
+.nav-links button {
+  color: white !important;
+}
+
+.nav-links a:hover,
+.nav-links button:hover {
+  color: #ffd54f !important;
+}
+
+.active-link {
+  color: #ffd54f !important;
+  font-weight: 600;
+}
+
+.mat-toolbar.mat-primary {
+  background: #1a237e !important;
+  color: white !important;
+}

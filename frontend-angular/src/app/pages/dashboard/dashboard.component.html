@@ -1,0 +1,75 @@
+<div class="page-container">
+  @if (loading) {
+    <div class="flex-center" style="padding: 80px">
+      <mat-spinner diameter="56"></mat-spinner>
+    </div>
+  } @else if (profile) {
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h1>Welcome back, {{ profile.fullName.split(' ')[0] }}!</h1>
+        <p>Here's an overview of your activity on BlogSpace.</p>
+      </div>
+      <div class="quick-actions">
+        <a mat-flat-button color="accent" routerLink="/create-blog">
+          <mat-icon>add</mat-icon> New Blog
+        </a>
+        <a mat-flat-button color="accent" routerLink="/my-blogs">
+          <mat-icon>book</mat-icon> My Blogs
+        </a>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <app-dashboard-card
+        title="Total Blogs Created"
+        [value]="profile.totalBlogs"
+        icon="article"
+        color="primary">
+      </app-dashboard-card>
+      <app-dashboard-card
+        title="Total Comments"
+        [value]="profile.totalComments"
+        icon="comment"
+        color="accent">
+      </app-dashboard-card>
+      <app-dashboard-card
+        title="Member Since"
+        [value]="profile.createdAt | date:'MMM yyyy'"
+        icon="calendar_today"
+        color="success">
+      </app-dashboard-card>
+    </div>
+
+    <div class="account-card mt-32">
+      <h2 class="section-title">Account Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <mat-icon>person</mat-icon>
+          <div>
+            <label>Full Name</label>
+            <p>{{ profile.fullName }}</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <mat-icon>email</mat-icon>
+          <div>
+            <label>Email Address</label>
+            <p>{{ profile.email }}</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <mat-icon>event</mat-icon>
+          <div>
+            <label>Registration Date</label>
+            <p>{{ profile.createdAt | date:'longDate' }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-24">
+        <a mat-stroked-button color="primary" routerLink="/my-account">
+          <mat-icon>settings</mat-icon> Manage Account
+        </a>
+      </div>
+    </div>
+  }
+</div>

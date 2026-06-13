@@ -1,0 +1,44 @@
+<div class="page-container">
+  @if (loading) {
+    <div class="flex-center" style="padding: 80px">
+      <mat-spinner diameter="56"></mat-spinner>
+    </div>
+  } @else if (error || !blog) {
+    <div class="empty-state">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Blog not found</h3>
+      <a mat-flat-button color="primary" routerLink="/blogs" class="mt-16">Back to Blogs</a>
+    </div>
+  } @else {
+    <a mat-button routerLink="/blogs" class="back-btn">
+      <mat-icon>arrow_back</mat-icon> Back to Blogs
+    </a>
+
+    <article class="blog-article">
+      <h1 class="blog-title">{{ blog.title }}</h1>
+
+      <div class="blog-meta flex items-center gap-8 flex-wrap mb-24">
+        <mat-chip-set>
+          <mat-chip class="chip-author">
+            <mat-icon matChipAvatar>person</mat-icon>
+            {{ blog.authorName }}
+          </mat-chip>
+        </mat-chip-set>
+        <span class="text-muted">
+          <mat-icon style="font-size:16px;width:16px;height:16px;vertical-align:middle">calendar_today</mat-icon>
+          {{ blog.createdAt | date:'longDate' }}
+        </span>
+        <span class="text-muted">
+          <mat-icon style="font-size:16px;width:16px;height:16px;vertical-align:middle">comment</mat-icon>
+          {{ blog.commentCount }} comment{{ blog.commentCount !== 1 ? 's' : '' }}
+        </span>
+      </div>
+
+      <div class="blog-content">
+        <p>{{ blog.content }}</p>
+      </div>
+    </article>
+
+    <app-comment-section [blogId]="blog.id"></app-comment-section>
+  }
+</div>
