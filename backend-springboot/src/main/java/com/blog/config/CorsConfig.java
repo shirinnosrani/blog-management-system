@@ -15,7 +15,9 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://localhost:*"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:4200",
+                "http://localhost:*",
+                "https://blog-management-frontend-production.up.railway.app"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setExposedHeaders(List.of("Authorization"));
