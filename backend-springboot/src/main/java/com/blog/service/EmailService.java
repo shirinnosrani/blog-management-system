@@ -14,9 +14,10 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     public void sendOtp(String toEmail, String otp) throws MessagingException {
+        System.out.println("Inside sendotp 1 method");
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
+System.out.println("Inside sendotp 2 method");
         helper.setTo(toEmail);
         helper.setSubject("BlogSpace — Your Email Verification OTP");
         helper.setText("""
@@ -44,7 +45,7 @@ public class EmailService {
               </body>
             </html>
             """.formatted(otp), true);
-
+System.out.println("Inside sendotp 3 method");
         mailSender.send(message);
     }
 }
