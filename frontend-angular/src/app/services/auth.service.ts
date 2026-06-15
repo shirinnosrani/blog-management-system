@@ -14,6 +14,20 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  sendOtp(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${environment.apiUrl}/api/auth/send-otp`,
+      { email }
+    );
+  }
+
+  verifyOtp(email: string, otp: string): Observable<{ message: string; verified: boolean }> {
+    return this.http.post<{ message: string; verified: boolean }>(
+      `${environment.apiUrl}/api/auth/verify-otp`,
+      { email, otp }
+    );
+  }
+
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/api/auth/register`, data).pipe(
       tap(res => this.setSession(res))

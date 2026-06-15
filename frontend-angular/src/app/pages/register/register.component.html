@@ -1,64 +1,138 @@
 <div class="auth-page">
-  <div class="form-container" style="max-width: 520px">
-    <div class="form-header">
-      <mat-icon class="form-icon">person_add</mat-icon>
-      <h1>Create Account</h1>
-      <p>Join BlogSpace and start sharing your stories</p>
-    </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Full Name</mat-label>
-        <input matInput formControlName="fullName" placeholder="John Doe">
-        <mat-icon matSuffix>badge</mat-icon>
-        @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
-          <mat-error>Full name must be at least 2 characters</mat-error>
-        }
-      </mat-form-field>
+  <!-- ═══════════════════════════════════════
+       STEP 1 — Registration Details
+  ════════════════════════════════════════ -->
+  @if (step === 1) {
+    <div class="form-container" style="max-width:520px">
+      <div class="form-header">
+        <mat-icon class="form-icon">person_add</mat-icon>
+        <h1>Create Account</h1>
+        <p>Join BlogSpace and start sharing your stories</p>
+      </div>
 
-      <mat-form-field appearance="outline" class="full-width mt-16">
-        <mat-label>Email Address</mat-label>
-        <input matInput type="email" formControlName="email" placeholder="you@example.com">
-        <mat-icon matSuffix>email</mat-icon>
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <mat-error>Please enter a valid email address</mat-error>
-        }
-      </mat-form-field>
+      <form [formGroup]="detailsForm" (ngSubmit)="onSendOtp()">
 
-      <mat-form-field appearance="outline" class="full-width mt-16">
-        <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-        <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" placeholder="John Doe">
+          <mat-icon matSuffix>badge</mat-icon>
+          @if (detailsForm.get('fullName')?.invalid && detailsForm.get('fullName')?.touched) {
+            <mat-error>Full name must be at least 2 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width mt-16">
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="you@example.com">
+          <mat-icon matSuffix>email</mat-icon>
+          @if (detailsForm.get('email')?.invalid && detailsForm.get('email')?.touched) {
+            <mat-error>Please enter a valid email address</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width mt-16">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+          <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (detailsForm.get('password')?.invalid && detailsForm.get('password')?.touched) {
+            <mat-error>Password must be at least 8 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width mt-16">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword">
+          <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm">
+            <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (detailsForm.hasError('passwordMismatch') && detailsForm.get('confirmPassword')?.touched) {
+            <mat-error>Passwords do not match</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit"
+          class="full-width mt-24 submit-btn" [disabled]="detailsForm.invalid || loading">
+          @if (loading) {
+            <mat-spinner diameter="20" color="accent"></mat-spinner>
+          } @else {
+            <mat-icon>send</mat-icon> Send Verification OTP
+          }
         </button>
-        @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <mat-error>Password must be at least 8 characters</mat-error>
-        }
-      </mat-form-field>
+      </form>
 
-      <mat-form-field appearance="outline" class="full-width mt-16">
-        <mat-label>Confirm Password</mat-label>
-        <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword">
-        <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm">
-          <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
-          <mat-error>Passwords do not match</mat-error>
-        }
-      </mat-form-field>
-
-      <button mat-flat-button color="primary" type="submit"
-        class="full-width mt-24 submit-btn" [disabled]="form.invalid || loading">
-        @if (loading) {
-          <mat-spinner diameter="20" color="accent"></mat-spinner>
-        } @else {
-          <mat-icon>person_add</mat-icon> Create Account
-        }
-      </button>
-    </form>
-
-    <div class="form-footer mt-24">
-      <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+      <div class="form-footer mt-24">
+        <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+      </div>
     </div>
-  </div>
+  }
+
+  <!-- ═══════════════════════════════════════
+       STEP 2 — Enter OTP
+  ════════════════════════════════════════ -->
+  @if (step === 2) {
+    <div class="form-container otp-container" style="max-width:460px">
+      <div class="form-header">
+        <div class="otp-icon-wrap">
+          <mat-icon class="form-icon otp-icon">mark_email_read</mat-icon>
+        </div>
+        <h1>Verify Your Email</h1>
+        <p class="otp-info">{{ otpInfoMsg }}</p>
+        <p class="otp-sub">Enter the 6-digit code sent to<br>
+          <strong>{{ detailsForm.get('email')?.value }}</strong>
+        </p>
+      </div>
+
+      <form [formGroup]="otpForm" (ngSubmit)="onVerifyAndRegister()">
+
+        <mat-form-field appearance="outline" class="full-width otp-field">
+          <mat-label>6-Digit OTP</mat-label>
+          <input matInput formControlName="otp" placeholder="000000"
+                 maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+                 class="otp-input">
+          <mat-icon matSuffix>pin</mat-icon>
+          @if (otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched) {
+            <mat-error>Please enter the 6-digit OTP</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit"
+          class="full-width mt-24 submit-btn" [disabled]="otpForm.invalid || loading">
+          @if (loading) {
+            <mat-spinner diameter="20" color="accent"></mat-spinner>
+          } @else {
+            <mat-icon>verified_user</mat-icon> Verify & Create Account
+          }
+        </button>
+      </form>
+
+      <div class="otp-actions mt-16">
+        <p>Didn't receive the code?
+          <button mat-button color="primary" (click)="resendOtp()" [disabled]="loading">
+            Resend OTP
+          </button>
+        </p>
+        <button mat-button (click)="goBack()" [disabled]="loading">
+          <mat-icon>arrow_back</mat-icon> Change email / details
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════
+       STEP 3 — Success
+  ════════════════════════════════════════ -->
+  @if (step === 3) {
+    <div class="form-container success-container" style="max-width:420px">
+      <div class="success-icon-wrap">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+      </div>
+      <h1>Welcome to BlogSpace!</h1>
+      <p>Your account has been created successfully.<br>Redirecting you to your dashboard…</p>
+      <mat-spinner diameter="32" class="mt-24"></mat-spinner>
+    </div>
+  }
+
 </div>
