@@ -16,6 +16,7 @@ public class OtpService {
 
     public void generateAndSend(String email) throws MessagingException {
         String otp = String.format("%06d", random.nextInt(1_000_000));
+        System.out.println("Inside generateAndSend method");
         otpStore.save(email, otp);
         emailService.sendOtp(email, otp);
     }
