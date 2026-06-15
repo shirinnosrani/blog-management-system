@@ -13,6 +13,7 @@ public class OtpStore {
     private final Map<String, OtpEntry> store = new ConcurrentHashMap<>();
 
     public void save(String email, String otp) {
+        System.out.println("Inside save method");
         store.put(email.toLowerCase(), new OtpEntry(otp, LocalDateTime.now().plusMinutes(5)));
     }
 
