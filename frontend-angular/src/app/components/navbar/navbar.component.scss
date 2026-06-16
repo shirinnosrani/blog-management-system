@@ -45,16 +45,3 @@
   background: #1a237e !important;
   color: white !important;
 }
-
-.register-btn {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border-radius: 30px !important;
-  font-weight: 600 !important;
-  padding: 0 24px !important;
-  min-width: 120px;
-}
-
-::ng-deep .register-btn .mdc-button__label {
-  color: #000000 !important;
-}
