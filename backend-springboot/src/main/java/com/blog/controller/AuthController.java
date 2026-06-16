@@ -4,7 +4,6 @@ import com.blog.dto.*;
 import com.blog.repository.UserRepository;
 import com.blog.service.AuthService;
 import com.blog.service.OtpService;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
