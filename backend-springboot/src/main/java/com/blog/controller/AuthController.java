@@ -7,11 +7,13 @@ import com.blog.service.OtpService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -46,8 +48,11 @@ public class AuthController {
             otpService.generateAndSend(request.getEmail());
             return ResponseEntity.ok(
                     Map.of("message", "OTP sent to " + request.getEmail() + ". Please check your inbox."));
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             System.out.println("Error Message : "+e.getMessage());
+            e.printStackTrace();
+            log.error("Error Message : ",e);
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "Failed to send OTP. Please try again."));
         }

@@ -3,24 +3,27 @@ package com.blog.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    public void sendOtp(String toEmail, String otp) throws MessagingException {
+    public void sendOtp(String toEmail, String otp) {
         System.out.println("Inside sendotp 1 method");
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-System.out.println("Inside sendotp 2 method");
-        helper.setTo(toEmail);
-        helper.setSubject("BlogSpace — Your Email Verification OTP");
-        helper.setText("""
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            System.out.println("Inside sendotp 2 method");
+            helper.setTo(toEmail);
+            helper.setSubject("BlogSpace — Your Email Verification OTP");
+            helper.setText("""
             <!DOCTYPE html>
             <html>
               <body style="font-family: Arial, sans-serif; background:#f4f4f4; padding:40px 0;">
@@ -45,7 +48,14 @@ System.out.println("Inside sendotp 2 method");
               </body>
             </html>
             """.formatted(otp), true);
-System.out.println("Inside sendotp 3 method");
-        mailSender.send(message);
+            System.out.println("Inside sendotp 3 method");
+            mailSender.send(message);
+        } catch (Exception e) {
+            System.out.println("Error Message : "+e.getMessage());
+            e.printStackTrace();
+            log.error("Error Message : ",e);
+            throw new RuntimeException(e);
+        }
+
     }
 }
