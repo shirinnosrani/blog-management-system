@@ -7,11 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     private final JavaMailSender mailSender;
 
@@ -21,6 +25,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             System.out.println("Inside sendotp 2 method");
+            helper.setFrom(fromEmail);
             helper.setTo(toEmail);
             helper.setSubject("BlogSpace — Your Email Verification OTP");
             helper.setText("""
@@ -50,11 +55,14 @@ public class EmailService {
             """.formatted(otp), true);
             System.out.println("Inside sendotp 3 method");
             mailSender.send(message);
+            log.info("OTP email sent successfully to {}", toEmail);
         } catch (Exception e) {
             System.out.println("Error Message : "+e.getMessage());
-            e.printStackTrace();
-            log.error("Error Message : ",e);
-            throw new RuntimeException(e);
+            log.error("Failed to send OTP email", e);
+
+            throw new RuntimeException(
+                    "Unable to send OTP email. Please try again."
+            );
         }
 
     }

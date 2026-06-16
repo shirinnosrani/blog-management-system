@@ -50,8 +50,7 @@ public class AuthController {
                     Map.of("message", "OTP sent to " + request.getEmail() + ". Please check your inbox."));
         } catch (Exception e) {
             System.out.println("Error Message : "+e.getMessage());
-            e.printStackTrace();
-            log.error("Error Message : ",e);
+            log.error("Failed to send OTP email", e);
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "Failed to send OTP. Please try again."));

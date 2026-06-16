@@ -20,15 +20,17 @@ public class OtpService {
         String otp = String.format("%06d", random.nextInt(1_000_000));
         System.out.println("Inside generateAndSend method");
         try {
-            otpStore.save(email, otp);
-            System.out.println("Save otp complete");
             emailService.sendOtp(email, otp);
             System.out.println("OTP send complete");
+            otpStore.save(email, otp);
+            System.out.println("Save otp complete");
         } catch (Exception e) {
             System.out.println("Error Message : "+e.getMessage());
-            e.printStackTrace();
-            log.error("Error Message : ",e);
-            throw new RuntimeException(e);
+            log.error("Failed to send OTP email", e);
+
+            throw new RuntimeException(
+                    "Unable to send OTP email. Please try again."
+            );
         }
 
     }
