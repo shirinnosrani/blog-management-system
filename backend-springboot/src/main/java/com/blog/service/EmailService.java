@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -17,53 +18,100 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
+    @Value("${BREVO_API_KEY}")
+    private String brevoApiKey;
+
+    private static final String BREVO_URL =
+            "https://api.brevo.com/v3/smtp/email";
+
+    private final OkHttpClient client = new OkHttpClient();
+
     private final JavaMailSender mailSender;
 
     public void sendOtp(String toEmail, String otp) {
-        System.out.println("Inside sendotp 1 method");
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            System.out.println("Inside sendotp 2 method");
-            helper.setFrom(fromEmail);
-            helper.setTo(toEmail);
-            helper.setSubject("BlogSpace — Your Email Verification OTP");
-            helper.setText("""
-            <!DOCTYPE html>
-            <html>
-              <body style="font-family: Arial, sans-serif; background:#f4f4f4; padding:40px 0;">
-                <div style="max-width:480px; margin:0 auto; background:#fff;
-                            border-radius:12px; padding:40px; box-shadow:0 2px 12px rgba(0,0,0,.08);">
-                  <h2 style="color:#1a237e; margin-top:0;">Email Verification</h2>
-                  <p style="color:#444;">Thank you for registering on <strong>BlogSpace</strong>!<br>
-                     Use the OTP below to verify your email address.</p>
-                  <div style="text-align:center; margin:32px 0;">
-                    <span style="display:inline-block; letter-spacing:10px; font-size:36px;
-                                 font-weight:700; color:#1a237e; background:#e8eaf6;
-                                 padding:16px 28px; border-radius:10px;">%s</span>
-                  </div>
-                  <p style="color:#888; font-size:13px;">
-                    This code is valid for <strong>5 minutes</strong>. Do not share it with anyone.
-                  </p>
-                  <hr style="border:none; border-top:1px solid #eee; margin:24px 0;">
-                  <p style="color:#aaa; font-size:12px; margin:0;">
-                    If you did not create an account, you can safely ignore this email.
-                  </p>
-                </div>
-              </body>
-            </html>
-            """.formatted(otp), true);
-            System.out.println("Inside sendotp 3 method");
-            mailSender.send(message);
+
+            String html = """
+                <!DOCTYPE html>
+                <html>
+                  <body style="font-family: Arial, sans-serif; background:#f4f4f4; padding:40px 0;">
+                    <div style="max-width:480px; margin:0 auto; background:#fff;
+                                border-radius:12px; padding:40px;">
+                      <h2 style="color:#1a237e;">Email Verification</h2>
+
+                      <p>Thank you for registering on <strong>BlogSpace</strong>.</p>
+
+                      <p>Your OTP is:</p>
+
+                      <div style="text-align:center;margin:30px 0;">
+                        <span style="font-size:36px;font-weight:bold;color:#1a237e;">
+                          %s
+                        </span>
+                      </div>
+
+                      <p>This OTP is valid for 5 minutes.</p>
+                    </div>
+                  </body>
+                </html>
+                """.formatted(otp);
+
+            String json = """
+                {
+                  "sender": {
+                    "name": "BlogSpace",
+                    "email": "nosranijuned@gmail.com"
+                  },
+                  "to": [
+                    {
+                      "email": "%s"
+                    }
+                  ],
+                  "subject": "BlogSpace - Email Verification OTP",
+                  "htmlContent": %s
+                }
+                """.formatted(
+                    toEmail,
+                    "\"" + html.replace("\"", "\\\"")
+                            .replace("\n", "\\n") + "\""
+            );
+
+            RequestBody body =
+                    RequestBody.create(
+                            json,
+                            MediaType.parse("application/json")
+                    );
+
+            Request request =
+                    new Request.Builder()
+                            .url(BREVO_URL)
+                            .post(body)
+                            .addHeader("accept", "application/json")
+                            .addHeader("content-type", "application/json")
+                            .addHeader("api-key", brevoApiKey)
+                            .build();
+
+            Response response =
+                    client.newCall(request).execute();
+
+            if (!response.isSuccessful()) {
+
+                String error =
+                        response.body() != null
+                                ? response.body().string()
+                                : "Unknown error";
+
+                throw new RuntimeException(error);
+            }
+
             log.info("OTP email sent successfully to {}", toEmail);
+
         } catch (Exception e) {
-            System.out.println("Error Message :  "+e.getMessage());
+
             log.error("Failed to send OTP email", e);
 
             throw new RuntimeException(
                     "Unable to send OTP email. Please try again."
             );
         }
-
     }
 }
