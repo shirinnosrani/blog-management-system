@@ -57,7 +57,7 @@ public class EmailService {
             mailSender.send(message);
             log.info("OTP email sent successfully to {}", toEmail);
         } catch (Exception e) {
-            System.out.println("Error Message : "+e.getMessage());
+            System.out.println("Error Message :  "+e.getMessage());
             log.error("Failed to send OTP email", e);
 
             throw new RuntimeException(
