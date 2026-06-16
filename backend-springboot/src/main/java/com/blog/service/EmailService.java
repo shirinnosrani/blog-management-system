@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 @RequiredArgsConstructor
 public class EmailService {
 
-    @Value("${spring.mail.username}")
-    private String fromEmail;
+//    @Value("${spring.mail.username}")
+//    private String fromEmail;
 
     @Value("${BREVO_API_KEY}")
     private String brevoApiKey;
@@ -26,7 +26,7 @@ public class EmailService {
 
     private final OkHttpClient client = new OkHttpClient();
 
-    private final JavaMailSender mailSender;
+//    private final JavaMailSender mailSender;
 
     public void sendOtp(String toEmail, String otp) {
         try {
